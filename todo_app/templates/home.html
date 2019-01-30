@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>TodoMVC</title>
+	</head>
+	<body>
+		<h1>todos</h1>
+		<form method="POST">
+			<input name="item" placeholder="What needs to be done?" />
+			{% csrf_token %}
+		</form>
+
+		<table id="id_list_table">
+			<tr><td>{{ new_item_text }}</td></tr>
+		</table>
+
+		{% if all_items %}
+		<table>
+
+			{% for item in all_items %}
+				{% if display == 'active' %}
+						{% if not item.completed %}
+							<tr>
+								<td><input type="checkbox" onchange='window.location.href="{% url "cross_off" item.id %}"'></td>
+								<td>{{ item.item }}</td>
+								<td><a href="{% url 'delete' item.id %}">x</a></td>
+							</tr>
+						{% endif %}
+				{% elif display == 'completed' %}
+						{% if item.completed %}
+							<tr>
+								<td><input type="checkbox" checked="checked" onchange='window.location.href="{% url "uncross" item.id %}"'></td>
+								<td><s>{{ item.item }}</s></td>
+								<td><a href="{% url 'delete' item.id %}">x</a></td>
+							</tr>
+						{% endif %}
+				{% else %}
+						{% if item.completed %}
+							<tr>
+								<td><input type="checkbox" checked="checked" onchange='window.location.href="{% url "uncross" item.id %}"'></td>
+								<td><s>{{ item.item }}</s></td>
+								<td><a href="{% url 'delete' item.id %}">x</a></td>
+							</tr>
+						{% else %}
+							<tr>
+								<td><input type="checkbox" onchange='window.location.href="{% url "cross_off" item.id %}"'></td>
+								<td>{{ item.item }}</td>
+								<td><a href="{% url 'delete' item.id %}">x</a></td>
+							</tr>
+						{% endif %}
+				{% endif %}
+			{% endfor %}
+		</table>	
+		{% endif %}
+
+		<table>
+			<tr>
+				{% if item_left < 2 %}
+				<td><p>{{ item_left }} item left</p></td>
+				{% else %}
+				<td><p>{{ item_left }} items left</p></td>
+				{% endif %}
+				<td><input type="button" onclick='window.location.href="{% url "home" %}";' value="all"/></td>
+				<td><input type="button" onclick='window.location.href="{% url "active" %}";' value="active"/></td>
+				<td><input type="button" onclick='window.location.href="{% url "completed" %}";' value="completed"/></td>
+				<td><input type="button" onclick='window.location.href="{% url "clear_completed" %}";' value="clear completed"/></td>
+			</tr>
+		</table>
+	</body>
+</html>
