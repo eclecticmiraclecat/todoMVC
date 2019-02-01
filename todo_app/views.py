@@ -12,9 +12,9 @@ def home(request, new_context={}):
     if request.method == 'POST':
         form = TodoForm(request.POST or None)
         form.save()
-        return render(request, 'home.html', context=context)
-    else:
-        return render(request, 'home.html', context=context)
+        return redirect('/')
+
+    return render(request, 'home.html', context=context)
 
 
 def delete(request, todo_id):
